@@ -1,21 +1,36 @@
-FROM maven:3.6.3-openjdk-8
+# docker build -f pipelines/streaming-atomfeed/Dockerfile ./ -t ghcr.io/i-tech-uw/openmrs-fhir-analytics-streaming-atomfeed:latest
+FROM adoptopenjdk/maven-openjdk8 as build
 
-WORKDIR /app/openmrs-fhir-analytics
+WORKDIR /app
 
-COPY ./pom.xml /app/openmrs-fhir-analytics/pom.xml
-COPY ./streaming-atomfeed/pom.xml /app/openmrs-fhir-analytics/streaming-atomfeed/pom.xml
-COPY ./streaming-binlog/pom.xml /app/openmrs-fhir-analytics/streaming-binlog/pom.xml
-COPY ./common/pom.xml /app/openmrs-fhir-analytics/common/pom.xml
-COPY ./batch/pom.xml /app/openmrs-fhir-analytics/batch/pom.xml
+# Selective Adds to Speed Up Build
+ADD ../pipelines/common ./pipelines/common
+ADD ../pipelines/streaming-atomfeed/pom.xml ./pipelines/streaming-atomfeed/pom.xml 
+ADD ../pipelines/streaming-binlog/pom.xml ./pipelines/streaming-binlog/pom.xml 
+ADD ../pipelines/batch/pom.xml ./pipelines/batch/pom.xml
+ADD ../pipelines/pom.xml ./pipelines/pom.xml
+ADD ../bunsen ./bunsen
+ADD ../pom.xml ./
 
 RUN mvn -B -pl streaming-atomfeed -am verify --fail-never
 
-COPY ./common /app/openmrs-fhir-analytics/common
-COPY ./streaming-atomfeed /app/openmrs-fhir-analytics/streaming-atomfeed
-COPY ./batch /app/openmrs-fhir-analytics/batch
-COPY ./streaming-binlog /app/openmrs-fhir-analytics/streaming-binlog
+ADD ../pipelines/streaming-atomfeed/src ./pipelines/streaming-atomfeed/src
 
-RUN mvn -B install -DskipTests -Dlicense.skip=true -pl streaming-atomfeed -am
+RUN mvn -B install -DskipTests -Dlicense.skip=true -pl pipelines/streaming-atomfeed -am -B
+
+RUN /bin/bash -l -c 'echo echo "$(mvn -q help:evaluate -Dexpression=project.version -DforceStdout=true)" > /etc/profile.d/pom_version.sh'
+
+RUN chmod u+x /etc/profile.d/pom_version.sh
+
+RUN POM_VERSION=`/etc/profile.d/pom_version.sh` && cp /app/pipelines/streaming-atomfeed/target/streaming-atomfeed-bundled-$POM_VERSION.jar /app/app.jar
+
+FROM adoptopenjdk/maven-openjdk8 as run
+
+LABEL org.opencontainers.image.source https://github.com/i-tech-uw/openmrs-fhir-analytics
+
+WORKDIR /app/openmrs-fhir-analytics
+
+COPY --from=build /app/app.jar /app.jar
 
 ENV OPENMRS_URL=""
 ENV OPENMRS_USERNAME=""
