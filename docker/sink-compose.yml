@@ -18,8 +18,11 @@ services:
     image: "hapiproject/hapi:latest"
     container_name: sink-server
     environment:
+      - spring.datasource.hikari.maximum-pool-size=50
+      - hapi.fhir.mdm_enabled=false
       - hapi.fhir.enforce_referential_integrity_on_delete=false
       - hapi.fhir.enforce_referential_integrity_on_write=false
+      - hapi.fhir.client_id_strategy=ANY
     restart: unless-stopped
     ports:
       - 8098:8080

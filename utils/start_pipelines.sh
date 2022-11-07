@@ -57,13 +57,14 @@ function usage() {
   echo "  default: does not skip, i.e., it asks for explicit confirmation."
   echo ""
   echo "-u|-sourceUrl URL, the URL for the source FHIR store."
-  echo "  default: http://localhost:8099/openmrs"
+  echo "  default: http://localhost:8099/openmrs/ws/fhir2/R4"
   echo ""
   echo "-streamingLog FILE, the file to capture streaming pipeline logs."
   echo "  default: tmp/streaming.log"
   echo ""
   echo "-streamingJar JAR_FILE, the bundled jar file for the streaming pipeline."
-  echo "  default: ./streaming-binlog/target/streaming-binlog-bundled*.jar."
+  echo "  default: ./streaming/target/streaming-bundled*.jar."
+  # TODO: The above default does not seem to be right; fix and test!
   echo ""
   # TODO: Add the feature for passing extra options directly to the pipelines.
   # echo "If there are any other options remaining at the end (extra-options), they are passed to "
@@ -111,7 +112,7 @@ function process_options() {
   OUTPUT_DIR=""
   STREAMING_JAR=""
   BATCH_JAR=""
-  SOURCE_URL="http://localhost:8099/openmrs"
+  SOURCE_URL="http://localhost:8099/openmrs/ws/fhir2/R4"
   CONFIG_FILE="../utils/dbz_event_to_fhir_config.json"
   FLUSH_STREAMING=3600
   FLUSH_BATCH=600
@@ -227,7 +228,7 @@ function process_options() {
 # Globals:
 #   FOUND_FILE the unique file that is found.
 # Arguments:
-#   The search pattern, e.g ./streaming-binlog/target/streaming-binlog-bundled*.jar
+#   The search pattern, e.g ./streaming/target/streaming-bundled*.jar
 #######################################
 function find_unique_file() {
   local file_count
@@ -280,7 +281,7 @@ fi
 mkdir ${OUTPUT_DIR}
 
 if [[ -z ${STREAMING_JAR} ]]; then
-  find_unique_file "./streaming-binlog/target/streaming-binlog-bundled*.jar"
+  find_unique_file "./streaming/target/streaming-bundled*.jar"
   STREAMING_JAR="${FOUND_FILE}"
 fi
 
@@ -291,7 +292,7 @@ fi
 
 common_params="\
   --fhirDebeziumConfigPath=${CONFIG_FILE} \
-  --openmrsServerUrl=${SOURCE_URL} \
+  --fhirServerUrl=${SOURCE_URL} \
   --outputParquetPath=${OUTPUT_DIR} \
   --fhirSinkPath=${SINK_PATH} \
   --sinkUserName=${SINK_USERNAME} \

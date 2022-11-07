@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- Copyright 2020 Google LLC
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
+    Copyright 2020-2022 Google LLC
 
-      http://www.apache.org/licenses/LICENSE-2.0
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
 -->
-
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -29,7 +28,7 @@
   <artifactId>common</artifactId>
 
   <properties>
-    <c3p0.version>0.9.5.4</c3p0.version>
+    <c3p0.version>0.9.5.5</c3p0.version>
   </properties>
 
   <dependencies>
@@ -50,13 +49,13 @@
     <dependency>
       <groupId>com.google.api-client</groupId>
       <artifactId>google-api-client-gson</artifactId>
-      <version>1.30.9</version>
+      <version>2.0.1</version>
     </dependency>
 
     <dependency>
       <groupId>com.google.auth</groupId>
       <artifactId>google-auth-library-oauth2-http</artifactId>
-      <version>1.0.0</version>
+      <version>1.12.1</version>
     </dependency>
 
     <dependency>
@@ -94,7 +93,7 @@
     <dependency>
       <groupId>org.apache.avro</groupId>
       <artifactId>avro</artifactId>
-      <version>1.10.0</version>
+      <version>1.11.1</version>
     </dependency>
 
     <dependency>
@@ -106,19 +105,25 @@
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-common</artifactId>
-      <version>3.3.0</version>
+      <version>3.3.4</version>
     </dependency>
 
     <dependency>
       <groupId>com.cerner.bunsen</groupId>
       <artifactId>bunsen-core-stu3</artifactId>
-      <version>0.5.13-SNAPSHOT</version>
+      <version>0.5.14-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.cerner.bunsen</groupId>
+      <artifactId>bunsen-core-r4</artifactId>
+      <version>0.5.14-SNAPSHOT</version>
     </dependency>
 
     <dependency>
       <groupId>com.cerner.bunsen</groupId>
       <artifactId>bunsen-avro</artifactId>
-      <version>0.5.13-SNAPSHOT</version>
+      <version>0.5.14-SNAPSHOT</version>
     </dependency>
 
     <dependency>
@@ -128,7 +133,7 @@
     <dependency>
       <groupId>com.google.jimfs</groupId>
       <artifactId>jimfs</artifactId>
-      <version>1.1</version>
+      <version>1.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
